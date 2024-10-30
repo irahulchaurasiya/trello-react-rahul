@@ -3,6 +3,7 @@ import Boards from "../components/Boards.jsx";
 import axios from "axios";
 import { Box, Button, Input } from "@chakra-ui/react";
 import BoardsImage from "../assets/images/BoardsPage.jpg";
+import Header from "../components/Header.jsx";
 
 const Homepage = () => {
   const url = import.meta.env.VITE_URL;
@@ -21,7 +22,7 @@ const Homepage = () => {
     getBoardsData();
   }, []);
 
-  console.log(allBoards)
+  console.log(allBoards);
 
   return (
     <Box
@@ -30,12 +31,13 @@ const Homepage = () => {
       bgPosition="center"
       height="100vh"
       width="100%"
-      padding="4"
+      padding="0"
     >
-      {allBoards.map((board) => {
+      <Header />
+      {/* {allBoards.map((board) => {
         console.log(board);
         <Boards boards={board} />;
-      })}
+      })} */}
     </Box>
   );
 };
