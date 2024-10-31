@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { Box, Button, Heading } from "@chakra-ui/react";
+import SingleBoardPage from "./pages/SingleBoardPage.jsx";
 
 const Home = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route>
             <Route path="/" element={<Home />} />
             <Route path="/boards" element={<Homepage />} />
+            <Route path="/boards/:id" element={<SingleBoardPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
