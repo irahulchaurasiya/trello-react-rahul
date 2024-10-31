@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <Box
       width="100%"
-      textStyle="xl"
+      textStyle="2xl"
       fontWeight="bold"
       textAlign="center"
       boxShadow="md"
