@@ -9,7 +9,8 @@ const Header = () => {
       fontWeight="bold"
       textAlign="center"
       boxShadow="md"
-      p={"2"}
+      p="2"
+      color="whiteAlpha.800"
     >
       Trello
     </Box>
