@@ -3,9 +3,7 @@ import React from "react";
 
 const Boards = ({ board }) => {
   console.log(board);
-  return <Box>
-    Board
-  </Box>;
+  return <Box>Board</Box>;
 };
 
 export default Boards;
