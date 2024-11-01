@@ -12,7 +12,7 @@ import { Stack } from "@chakra-ui/react";
 const CreateBoardPopover = ({ onCreate }) => {
   const [boardName, setBoardName] = useState("");
 
-  const handleCreateBoard = () => {
+  const handleCreateBoard = (e) => {
     if (boardName.trim()) {
       onCreate(boardName);
       setBoardName("");
@@ -22,24 +22,38 @@ const CreateBoardPopover = ({ onCreate }) => {
   return (
     <PopoverRoot>
       <PopoverTrigger asChild>
-        <Button bg={"gray.700"} variant={"solid"} margin={"auto"}>
+        <Button
+          bgColor="transparent"
+          variant="solid"
+          color="whiteAlpha.900"
+          margin="auto"
+        >
           Create new board
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
-        <PopoverBody>
+        <PopoverBody bgColor="gray.700" color="whiteAlpha.900">
           <form onSubmit={handleCreateBoard}>
             <Stack gap="4">
               <label>
                 <Text>Board title</Text>
                 <Input
+                  borderColor="red"
+                  color="whiteAlpha.900"
                   value={boardName}
                   onChange={(e) => setBoardName(e.target.value)}
                   placeholder="Enter The Name for Board"
                 />
               </label>
-              <Button size="sm" variant="outline" type="submit">
+              <Button
+                borderColor="gray.500"
+                color="whiteAlpha.900"
+                size="sm"
+                variant="outline"
+                type="submit"
+                _hover={{ bgColor: "gray.600" }}
+              >
                 Submit
               </Button>
             </Stack>
