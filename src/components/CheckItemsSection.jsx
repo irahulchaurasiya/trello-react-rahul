@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import {
-  getCheckedItemsPercent,
+
   handleDeleteRequest,
   handleGetRequest,
   handlePostRequest,
