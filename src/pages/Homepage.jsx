@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
 import Header from "../components/Header.jsx";
 import { Link } from "react-router-dom";
 import CreateBoardPopover from "../components/CreateBoardPopover";
+import { handleGetRequest, handlePostRequest } from "../utils/helper.js";
 
 const Homepage = () => {
   const url = import.meta.env.VITE_URL;
@@ -12,32 +12,28 @@ const Homepage = () => {
 
   const [allBoards, setAllBoards] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const authParams = `key=${apiKey}&token=${apiToken}`;
 
   useEffect(() => {
-    async function getBoardsData() {
-      setLoading(true);
-      setError(null);
-      try {
-        const { data } = await axios.get(
-          `${url}/members/me/boards?key=${apiKey}&token=${apiToken}`
-        );
-        setAllBoards(data);
-      } catch (err) {
-        setError("Failed to load boards.");
-      } finally {
+    setLoading(true);
+
+    handleGetRequest(`${url}/members/me/boards?${authParams}`)
+      .then((response) => {
+        setAllBoards(response.data);
+      })
+      .catch((error) => {
+        console.error("Unable to get boards!", error);
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    }
-    getBoardsData();
-  }, [url, apiKey, apiToken]);
+      });
+  }, []);
 
   async function handleCreateBoard(name) {
     if (name) {
       try {
-        await axios.post(
-          `${url}/boards/?name=${name}&key=${apiKey}&token=${apiToken}`
-        );
+        await handlePostRequest(`${url}/boards/?name=${name}&${authParams}`);
         setAllBoards((prevBoards) => [...prevBoards, { name }]);
       } catch (err) {
         console.error("Error creating board:", err);
@@ -46,39 +42,46 @@ const Homepage = () => {
   }
 
   return (
-    <Box bgColor={"blue.100"} minHeight="100vh" width="100%" padding="0">
+    <Box bgColor="rgb(29, 33, 37)" minHeight="100vh" width="100%" padding="0">
       <Header />
-      <Text p={"8"} width="100%" fontSize="xl" fontWeight="bold">
+      <Text
+        p="8"
+        color="whiteAlpha.900"
+        width="100%"
+        fontSize="xl"
+        fontWeight="bold"
+      >
         Boards
       </Text>
       {loading ? (
         <Spinner />
-      ) : error ? (
-        <Text color="red.500">{error}</Text>
       ) : (
         <SimpleGrid minChildWidth="300px" gap="20px">
           <Card.Root
-            mb={2}
+            mb="2"
             w="80%"
             h="100px"
-            ml={"10%"}
-            mr={"10%"}
-            bgColor={"gray.700"}
-            color={"white"}
+            ml="10%"
+            mr="10%"
+            border="none"
+            bgColor="rgba(161, 189, 217, 0.08)"
+            color="whiteAlpha.900"
           >
             <CreateBoardPopover onCreate={handleCreateBoard} />
           </Card.Root>
           {allBoards.map((curr) => (
             <Link key={curr.id} to={`/boards/${curr.id}`}>
               <Card.Root
-                mb={2}
+                mb="2"
                 w="80%"
                 h="100px"
-                ml={"10%"}
-                mr={"10%"}
-                p={4}
-                bgColor={"gray.700"}
-                color={"white"}
+                ml="10%"
+                mr="10%"
+                p="4"
+                fontWeight="bold"
+                border="none"
+                bgColor="rgb(0, 121, 191)"
+                color="whiteAlpha.900"
               >
                 {curr.name}
               </Card.Root>
