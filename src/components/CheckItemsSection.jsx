@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import {
-
   handleDeleteRequest,
   handleGetRequest,
   handlePostRequest,
   handlePutRequest,
+  handleCheckItemsPercent,
 } from "../utils/helper";
 import { Box, Input, Spinner, Button, Progress } from "@chakra-ui/react";
 import { Checkbox } from "../components/ui/checkbox";
@@ -110,6 +110,8 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       });
   }
 
+  let percent = handleCheckItemsPercent(checkItems);
+
   return (
     <Box>
       {loading ? (
@@ -117,7 +119,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       ) : (
         <>
           <Box mt="2" display="flex" flexDirection="column">
-            <Progress.Root mb="2">
+            <Progress.Root value={percent} shape="roundec" mb="2">
               <ProgressBar></ProgressBar>
             </Progress.Root>
             {checkItems.map((checkItem) => {
