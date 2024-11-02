@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
-import Header from "../components/Header.jsx";
 import { Link } from "react-router-dom";
+
 import CreateBoardPopover from "../components/CreateBoardPopover";
 import { handleGetRequest, handlePostRequest } from "../utils/helper.js";
+import Header from "../components/Header.jsx";
 
 const Homepage = () => {
   const url = import.meta.env.VITE_URL;
@@ -11,7 +12,7 @@ const Homepage = () => {
   const apiToken = import.meta.env.VITE_TOKEN;
 
   const [allBoards, setAllBoards] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
@@ -30,14 +31,19 @@ const Homepage = () => {
       });
   }, []);
 
-  async function handleCreateBoard(name) {
+  function handleCreateBoard(name) {
     if (name) {
-      try {
-        await handlePostRequest(`${url}/boards/?name=${name}&${authParams}`);
-        setAllBoards((prevBoards) => [...prevBoards, { name }]);
-      } catch (err) {
-        console.error("Error creating board:", err);
-      }
+      setLoading(true);
+      handlePostRequest(`${url}/boards/?name=${name}&${authParams}`)
+        .then((response) => {
+          setAllBoards((prevBoards) => [...prevBoards, response.data]);
+        })
+        .catch((error) => {
+          console.log("Unable to create board!", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }
 
