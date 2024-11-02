@@ -135,6 +135,7 @@ const CardPage = ({ listId }) => {
               Add Card
             </Button>
             <Button
+              color="whiteAlpha.900"
               onClick={() => setIsAddingCard(false)}
               size="xs"
               bg="rgb(16, 18, 4)"
