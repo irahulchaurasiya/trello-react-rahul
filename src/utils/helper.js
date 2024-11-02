@@ -19,3 +19,16 @@ export const handleDeleteRequest = async (url) => {
   const response = await axios.delete(url);
   return response;
 };
+
+export const handleCheckItemsPercent = (checkItems) => {
+  let checkedCount = 0;
+  let totalCheckItems = checkItems.length;
+
+  checkItems.forEach((checkItem) => {
+    if (checkItem.state == "complete") {
+      checkedCount++;
+    }
+  });
+
+  return (checkedCount * 100) / totalCheckItems;
+};
