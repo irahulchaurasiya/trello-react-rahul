@@ -1,13 +1,13 @@
-import { Box, Input, Button, Stack, Text, Spinner } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { Box, Input, Button, Stack, Text, Spinner } from "@chakra-ui/react";
+import { FiCheckSquare } from "react-icons/fi";
+
 import {
   handlePostRequest,
   handleGetRequest,
   handleDeleteRequest,
 } from "../utils/helper";
-import { MdDelete } from "react-icons/md";
 import CheckItemsSection from "./CheckItemsSection";
-import { FiCheckSquare } from "react-icons/fi";
 
 const CheckListSection = ({ cardId }) => {
   const url = import.meta.env.VITE_URL;
@@ -18,10 +18,11 @@ const CheckListSection = ({ cardId }) => {
 
   const [checklists, setChecklists] = useState([]);
   const [checklistName, setChecklistName] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     function getChecklists() {
+      setLoading(true);
       handleGetRequest(`${url}/cards/${cardId}/checklists?${authParams}`)
         .then((response) => {
           setChecklists(response.data);
@@ -115,7 +116,9 @@ const CheckListSection = ({ cardId }) => {
               >
                 <Box display="flex" alignItems="center">
                   <FiCheckSquare />
-                  <Text fontWeight="bold" ml="2">{checklist.name}</Text>
+                  <Text fontWeight="bold" ml="2">
+                    {checklist.name}
+                  </Text>
                 </Box>
                 <Button
                   cursor="pointer"
@@ -123,7 +126,8 @@ const CheckListSection = ({ cardId }) => {
                   borderRadius="10"
                   size="xs"
                   onClick={() => handleDeleteChecklist(checklist.id)}
-                >Delete
+                >
+                  Delete
                 </Button>
               </Box>
               <CheckItemsSection cardId={cardId} checklistId={checklist.id} />
