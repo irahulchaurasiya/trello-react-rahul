@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Stack } from "@chakra-ui/react";
+import { Input, Button, Text } from "@chakra-ui/react";
+
 import {
   PopoverBody,
   PopoverContent,
@@ -6,8 +9,6 @@ import {
   PopoverTrigger,
   PopoverArrow,
 } from "../components/ui/popover";
-import { Input, Button, Text } from "@chakra-ui/react";
-import { Stack } from "@chakra-ui/react";
 
 const CreateBoardPopover = ({ onCreate }) => {
   const [boardName, setBoardName] = useState("");
