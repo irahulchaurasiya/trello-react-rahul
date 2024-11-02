@@ -133,8 +133,6 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                   justifyContent="space-between"
                 >
                   <Checkbox
-                    color="whiteAlpha.900"
-                    border="white 1px solid"
                     onClick={() =>
                       handleUpdateChechItem(checkItem.id, checkItemState)
                     }
