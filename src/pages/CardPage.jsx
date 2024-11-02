@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Button } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
+import { MdDelete, MdOutlineCancel } from "react-icons/md";
+import { Card, Flex, Text, Box, Input, Button } from "@chakra-ui/react";
+
 import {
   handleGetRequest,
   handlePostRequest,
   handleDeleteRequest,
 } from "../utils/helper";
-import { Card, Flex, Text, Box, Input } from "@chakra-ui/react";
-import { MdDelete, MdOutlineCancel } from "react-icons/md";
 import CardPopover from "../components/CardPopover";
 
 const CardPage = ({ listId }) => {
