@@ -119,7 +119,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       ) : (
         <>
           <Box mt="2" display="flex" flexDirection="column">
-            <Progress.Root value={percent} shape="roundec" mb="2">
+            <Progress.Root value={percent} mb="2">
               <ProgressBar></ProgressBar>
             </Progress.Root>
             {checkItems.map((checkItem) => {
@@ -133,6 +133,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                   justifyContent="space-between"
                 >
                   <Checkbox
+                    color="whiteAlpha.900"
                     onClick={() =>
                       handleUpdateChechItem(checkItem.id, checkItemState)
                     }
