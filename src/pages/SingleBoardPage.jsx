@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,15 +11,14 @@ import {
   Spinner,
   Input,
 } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { FaPlus } from "react-icons/fa6";
+import { MdDelete, MdOutlineCancel } from "react-icons/md";
+
 import {
   handleGetRequest,
   handlePostRequest,
   handlePutRequest,
 } from "../utils/helper";
-import { FaPlus } from "react-icons/fa6";
-import { MdDelete, MdOutlineCancel } from "react-icons/md";
 import CardPage from "./CardPage";
 
 const SingleBoardPage = () => {
@@ -197,7 +198,7 @@ const SingleBoardPage = () => {
                   bg="rgb(16, 18, 4)"
                   color="whiteAlpha.900"
                 >
-                  <MdOutlineCancel  />
+                  <MdOutlineCancel />
                 </Button>
               </Flex>
             </Box>
