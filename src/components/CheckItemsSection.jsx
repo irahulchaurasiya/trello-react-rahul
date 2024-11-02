@@ -134,6 +134,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                 >
                   <Checkbox
                     color="whiteAlpha.900"
+                    border="white"
                     onClick={() =>
                       handleUpdateChechItem(checkItem.id, checkItemState)
                     }
