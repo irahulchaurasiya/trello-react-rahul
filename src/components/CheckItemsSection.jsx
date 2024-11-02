@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { MdDelete } from "react-icons/md";
+import { Box, Input, Spinner, Button, Progress, Text } from "@chakra-ui/react";
+
 import {
   handleDeleteRequest,
   handleGetRequest,
@@ -6,10 +9,8 @@ import {
   handlePutRequest,
   handleCheckItemsPercent,
 } from "../utils/helper";
-import { Box, Input, Spinner, Button, Progress } from "@chakra-ui/react";
 import { Checkbox } from "../components/ui/checkbox";
 import { ProgressBar } from "../components/ui/progress";
-import { MdDelete } from "react-icons/md";
 
 const CheckItemsSection = ({ cardId, checklistId }) => {
   const url = import.meta.env.VITE_URL;
@@ -110,7 +111,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       });
   }
 
-  let percent = handleCheckItemsPercent(checkItems);
+  let percent = Math.ceil(handleCheckItemsPercent(checkItems));
 
   return (
     <Box>
@@ -119,9 +120,12 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       ) : (
         <>
           <Box mt="2" display="flex" flexDirection="column">
-            <Progress.Root value={percent} mb="2">
-              <ProgressBar></ProgressBar>
-            </Progress.Root>
+            <Box>
+              <Text>{percent}%</Text>
+              <Progress.Root value={percent} mb="2">
+                <ProgressBar></ProgressBar>
+              </Progress.Root>
+            </Box>
             {checkItems.map((checkItem) => {
               let checkItemState = checkItem.state;
               return (
