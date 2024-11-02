@@ -21,6 +21,9 @@ export const handleDeleteRequest = async (url) => {
 };
 
 export const handleCheckItemsPercent = (checkItems) => {
+  if(checkItems.length === 0){
+    return 0;
+  }
   let checkedCount = 0;
   let totalCheckItems = checkItems.length;
 
