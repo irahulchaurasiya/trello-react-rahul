@@ -44,7 +44,7 @@ const CheckListSection = ({ cardId }) => {
     setLoading(true);
 
     handlePostRequest(
-      `${url}/checklists?idCard=${cardId}&name=${newChecklistName}&${authParams}`
+      `${url}/cards/${cardId}/checklists?&name=${newChecklistName}&${authParams}`
     )
       .then((response) => {
         setChecklists([...checklists, response.data]);

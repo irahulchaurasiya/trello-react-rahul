@@ -65,7 +65,7 @@ const SingleBoardPage = () => {
     setLoading(true);
 
     handlePostRequest(
-      `${url}/lists?name=${newListName}&idBoard=${id}&${authParams}`
+      `${url}/boards/${id}/lists?name=${newListName}&${authParams}`
     )
       .then((response) => {
         setLists([...lists, response.data]);
