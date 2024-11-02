@@ -195,8 +195,9 @@ const SingleBoardPage = () => {
                   onClick={() => setIsAddingList(false)}
                   size="xs"
                   bg="rgb(16, 18, 4)"
+                  color="whiteAlpha.900"
                 >
-                  <MdOutlineCancel />
+                  <MdOutlineCancel  />
                 </Button>
               </Flex>
             </Box>
