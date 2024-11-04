@@ -82,14 +82,13 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
   }
 
   function handleUpdateChechItem(checkItemId, checkItemState) {
-    setLoading(true);
     const updatedState =
       checkItemState == "incomplete" ? "complete" : "incomplete";
 
     handlePutRequest(
       `${url}/cards/${cardId}/checklist/${checklistId}/checkItem/${checkItemId}?state=${updatedState}&${authParams}`
     )
-      .then((response) => {
+      .then(() => {
         setCheckItems(
           checkItems.map((checkItem) => {
             if (checkItem.id === checkItemId) {
@@ -107,7 +106,6 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
         toast.error("Unable to update checkitem status!", error);
       })
       .finally(() => {
-        setLoading(false);
       });
   }
 
@@ -142,7 +140,9 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                     }
                     checked={checkItemState == "complete"}
                   >
+                    <Text textDecoration= {checkItemState === "complete" ? 'line-through' : 'none'}>
                     {checkItem.name}
+                    </Text>
                   </Checkbox>
                   <MdDelete
                     onClick={() => handleDeleteCheckItem(checkItem.id)}
