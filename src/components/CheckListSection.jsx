@@ -21,24 +21,20 @@ const CheckListSection = ({ cardId }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    function getChecklists() {
-      setLoading(true);
-      handleGetRequest(`${url}/cards/${cardId}/checklists?${authParams}`)
-        .then((response) => {
-          setChecklists(response.data);
-        })
-        .catch((error) => {
-          console.error("Unable to get checklists!", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-
-    getChecklists();
+    setLoading(true);
+    handleGetRequest(`${url}/cards/${cardId}/checklists?${authParams}`)
+      .then((response) => {
+        setChecklists(response.data);
+      })
+      .catch((error) => {
+        console.error("Unable to get checklists!", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  function handleCreateChecklist() {
+  const handleCreateChecklist = () => {
     const newChecklistName = checklistName.trim();
 
     setLoading(true);
@@ -56,9 +52,9 @@ const CheckListSection = ({ cardId }) => {
         setChecklistName("");
         setLoading(false);
       });
-  }
+  };
 
-  function handleDeleteChecklist(checklistId) {
+  const handleDeleteChecklist = (checklistId) => {
     setLoading(true);
 
     handleDeleteRequest(`${url}/checklists/${checklistId}?${authParams}`)
@@ -73,7 +69,7 @@ const CheckListSection = ({ cardId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }
+  };
 
   return (
     <Box p="4" bg="gray.800" color="white" borderRadius="md" w="full">

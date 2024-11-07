@@ -14,6 +14,7 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import { MdDelete, MdOutlineCancel } from "react-icons/md";
 
+import SingleBoardPageHeader from "../components/SingleBoardPageHeader";
 import {
   handleGetRequest,
   handlePostRequest,
@@ -58,7 +59,7 @@ const SingleBoardPage = () => {
       });
   }, []);
 
-  function handleCreateList() {
+  const handleCreateList = () => {
     const newListName = listName.trim();
     if (!newListName) return;
 
@@ -77,9 +78,9 @@ const SingleBoardPage = () => {
         setListName("");
         setLoading(false);
       });
-  }
+  };
 
-  function handleDeleteList(listId) {
+  const handleDeleteList = (listId) => {
     setLoading(true);
 
     handlePutRequest(`${url}/lists/${listId}/closed?value=true&${authParams}`)
@@ -92,7 +93,7 @@ const SingleBoardPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }
+  };
 
   return (
     <Box
@@ -101,25 +102,7 @@ const SingleBoardPage = () => {
       minW="100%"
       overflowX="auto"
     >
-      <Flex
-        textStyle="2xl"
-        fontWeight="bold"
-        w="full"
-        justifyContent="space-between"
-        boxShadow="md"
-        p="2"
-      >
-        <Button
-          textStyle="xl"
-          color="whiteAlpha.800"
-          onClick={() => navigate(-1)}
-          variant="plain"
-        >
-          Back
-        </Button>
-        <Text color="whiteAlpha.800"> Trello</Text>
-        <Text color="whiteAlpha.800">RC</Text>
-      </Flex>
+      <SingleBoardPageHeader />
 
       <Flex p="2" w="full">
         <Heading as="h2" size="lg" color="whiteAlpha.800">

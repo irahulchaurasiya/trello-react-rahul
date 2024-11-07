@@ -31,7 +31,7 @@ const Homepage = () => {
       });
   }, []);
 
-  function handleCreateBoard(name) {
+  const handleCreateBoard = (name) => {
     if (name) {
       setLoading(true);
       handlePostRequest(`${url}/boards/?name=${name}&${authParams}`)

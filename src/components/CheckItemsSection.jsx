@@ -26,24 +26,21 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
 
   useEffect(() => {
     setLoading(true);
-    function getCheckItems() {
-      handleGetRequest(
-        `${url}/checklists/${checklistId}/checkItems?${authParams}`
-      )
-        .then((response) => {
-          setCheckItems(response.data);
-        })
-        .catch((error) => {
-          console.log("Unable to get checkitems!", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-    getCheckItems();
+    handleGetRequest(
+      `${url}/checklists/${checklistId}/checkItems?${authParams}`
+    )
+      .then((response) => {
+        setCheckItems(response.data);
+      })
+      .catch((error) => {
+        console.log("Unable to get checkitems!", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  function handleCreateCheckItem() {
+  const handleCreateCheckItem = () => {
     setLoading(true);
     if (checkItemName) {
       handlePostRequest(
@@ -60,9 +57,9 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
           setCheckItemName("");
         });
     }
-  }
+  };
 
-  function handleDeleteCheckItem(checkItemId) {
+  const handleDeleteCheckItem = (checkItemId) => {
     setLoading(true);
 
     handleDeleteRequest(
@@ -79,9 +76,9 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }
+  };
 
-  function handleUpdateChechItem(checkItemId, checkItemState) {
+  const handleUpdateChechItem = (checkItemId, checkItemState) => {
     const updatedState =
       checkItemState == "incomplete" ? "complete" : "incomplete";
 
@@ -103,11 +100,10 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
         );
       })
       .catch((error) => {
-        toast.error("Unable to update checkitem status!", error);
+        console.error("Unable to update checkitem status!", error);
       })
-      .finally(() => {
-      });
-  }
+      .finally(() => {});
+  };
 
   let percent = Math.ceil(handleCheckItemsPercent(checkItems));
 
@@ -140,8 +136,12 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                     }
                     checked={checkItemState == "complete"}
                   >
-                    <Text textDecoration= {checkItemState === "complete" ? 'line-through' : 'none'}>
-                    {checkItem.name}
+                    <Text
+                      textDecoration={
+                        checkItemState === "complete" ? "line-through" : "none"
+                      }
+                    >
+                      {checkItem.name}
                     </Text>
                   </Checkbox>
                   <MdDelete
