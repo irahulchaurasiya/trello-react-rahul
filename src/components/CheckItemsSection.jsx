@@ -101,7 +101,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
         );
       })
       .catch((error) => {
-        toast.error("Unable to update checkitem status!", error);
+        console.error("Unable to update checkitem status!", error);
       })
       .finally(() => {});
   };
