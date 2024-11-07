@@ -37,7 +37,7 @@ const CardPage = ({ listId }) => {
       });
   }, []);
 
-  function handleCreateCard() {
+  const handleCreateCard = () => {
     if (!cardName.trim()) return;
     setIsAddingCard(true);
 
@@ -57,9 +57,9 @@ const CardPage = ({ listId }) => {
           setLoading(false);
         });
     }
-  }
+  };
 
-  function handleDeleteCard(id) {
+  const handleDeleteCard = (id) => {
     setLoading(true);
 
     handleDeleteRequest(`${url}/cards/${id}?${authParams}`)
@@ -72,7 +72,7 @@ const CardPage = ({ listId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }
+  };
 
   return (
     <>
