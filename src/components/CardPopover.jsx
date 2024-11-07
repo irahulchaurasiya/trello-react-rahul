@@ -27,7 +27,12 @@ const CardPopover = ({ children, cardId, cardName }) => {
             <CheckListSection cardId={cardId} />
           </Stack>
         </PopoverBody>
-        <PopoverCloseTrigger color="whiteAlpha.900"></PopoverCloseTrigger>
+        <PopoverCloseTrigger
+          _hover={{
+            bgColor: "gray.800",
+          }}
+          color="whiteAlpha.900"
+        ></PopoverCloseTrigger>
       </PopoverContent>
     </PopoverRoot>
   );
