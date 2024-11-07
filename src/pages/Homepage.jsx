@@ -31,7 +31,7 @@ const Homepage = () => {
       });
   }, []);
 
-  function handleCreateBoard(name) {
+  const handleCreateBoard = (name) => {
     if (name) {
       setLoading(true);
       handlePostRequest(`${url}/boards/?name=${name}&${authParams}`)
@@ -45,7 +45,7 @@ const Homepage = () => {
           setLoading(false);
         });
     }
-  }
+  };
 
   return (
     <Box bgColor="rgb(29, 33, 37)" minHeight="100vh" width="100%" padding="0">
