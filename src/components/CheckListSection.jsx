@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Box, Input, Button, Stack, Text, Spinner } from "@chakra-ui/react";
 import { FiCheckSquare } from "react-icons/fi";
@@ -32,7 +33,7 @@ const CheckListSection = ({ cardId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [authParams, cardId, url]);
 
   const handleCreateChecklist = () => {
     const newChecklistName = checklistName.trim();
