@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,7 @@ const Homepage = () => {
       .finally(() => {
         dispatch(setLoading(false));
       });
-  }, []);
+  }, [authParams, dispatch, url]);
 
   const handleCreateBoard = (name) => {
     if (name) {
