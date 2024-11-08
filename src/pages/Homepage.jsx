@@ -1,51 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import CreateBoardPopover from "../components/CreateBoardPopover";
 import { handleGetRequest, handlePostRequest } from "../utils/helper.js";
 import Header from "../components/Header.jsx";
+import {
+  setBoards,
+  addBoards,
+  setLoading,
+} from "../redux/slices/boardsSlice.js";
 
 const Homepage = () => {
   const url = import.meta.env.VITE_URL;
   const apiKey = import.meta.env.VITE_KEY;
   const apiToken = import.meta.env.VITE_TOKEN;
-
-  const [allBoards, setAllBoards] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
+  const dispatch = useDispatch();
+  const { boards, loading } = useSelector((state) => state.boards);
+
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handleGetRequest(`${url}/members/me/boards?${authParams}`)
       .then((response) => {
-        setAllBoards(response.data);
+        dispatch(setBoards(response.data));
       })
       .catch((error) => {
         console.error("Unable to get boards!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
   }, []);
 
   const handleCreateBoard = (name) => {
     if (name) {
-      setLoading(true);
+      dispatch(setLoading(true));
       handlePostRequest(`${url}/boards/?name=${name}&${authParams}`)
         .then((response) => {
-          setAllBoards((prevBoards) => [...prevBoards, response.data]);
+          dispatch(addBoards(response.data));
         })
         .catch((error) => {
           console.log("Unable to create board!", error);
         })
         .finally(() => {
-          setLoading(false);
+          dispatch(setLoading(false));
         });
     }
-  }
+  };
 
   return (
     <Box bgColor="rgb(29, 33, 37)" minHeight="100vh" width="100%" padding="0">
@@ -75,7 +80,7 @@ const Homepage = () => {
           >
             <CreateBoardPopover onCreate={handleCreateBoard} />
           </Card.Root>
-          {allBoards.map((curr) => (
+          {boards.map((curr) => (
             <Link key={curr.id} to={`/boards/${curr.id}`}>
               <Card.Root
                 mb="2"
