@@ -1,12 +1,17 @@
-import { Provider } from "./components/ui/provider";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider as ReduxProvider } from "react-redux";
+
+import { Provider as ChakraProvider } from "./components/ui/provider";
 import App from "./App";
+import { store } from "./redux/store";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider>
-      <App />
-    </Provider>
+    <ReduxProvider store={store}>
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
+    </ReduxProvider>
   </React.StrictMode>
 );
