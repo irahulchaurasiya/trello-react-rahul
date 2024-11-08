@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { Box, Input, Spinner, Button, Progress, Text } from "@chakra-ui/react";
@@ -38,7 +39,7 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [authParams, checklistId, url]);
 
   const handleCreateCheckItem = () => {
     setLoading(true);
