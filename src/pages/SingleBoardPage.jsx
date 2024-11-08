@@ -57,7 +57,7 @@ const SingleBoardPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [authParams, id, url]);
 
   const handleCreateList = () => {
     const newListName = listName.trim();
