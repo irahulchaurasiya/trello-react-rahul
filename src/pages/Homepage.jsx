@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
@@ -29,7 +29,7 @@ const Homepage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [authParams, url]);
 
   const handleCreateBoard = (name) => {
     if (name) {
