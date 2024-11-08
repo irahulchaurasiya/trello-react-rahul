@@ -1,5 +1,5 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Homepage from "./pages/Homepage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SingleBoardPage from "./pages/SingleBoardPage.jsx";
