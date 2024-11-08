@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import { Stack } from "@chakra-ui/react";
 import { Input, Button, Text } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   PopoverBody,
@@ -9,14 +9,17 @@ import {
   PopoverTrigger,
   PopoverArrow,
 } from "../components/ui/popover";
+import { setBoardName } from "../redux/slices/boardsSlice";
 
 const CreateBoardPopover = ({ onCreate }) => {
-  const [boardName, setBoardName] = useState("");
+  const dispatch = useDispatch();
+
+  const { boardName } = useSelector((state) => state.boards);
 
   const handleCreateBoard = (e) => {
     if (boardName.trim()) {
       onCreate(boardName);
-      setBoardName("");
+      dispatch(setBoardName(""));
     }
   };
 
@@ -43,7 +46,7 @@ const CreateBoardPopover = ({ onCreate }) => {
                   borderColor="red"
                   color="whiteAlpha.900"
                   value={boardName}
-                  onChange={(e) => setBoardName(e.target.value)}
+                  onChange={(e) => dispatch(setBoardName(e.target.value))}
                   placeholder="Enter The Name for Board"
                 />
               </label>
