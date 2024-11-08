@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Stack } from "@chakra-ui/react";
 import { Input, Button, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +17,7 @@ const CreateBoardPopover = ({ onCreate }) => {
 
   const { boardName } = useSelector((state) => state.boards);
 
-  const handleCreateBoard = (e) => {
+  const handleCreateBoard = () => {
     if (boardName.trim()) {
       onCreate(boardName);
       dispatch(setBoardName(""));
