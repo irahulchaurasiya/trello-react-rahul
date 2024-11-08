@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { MdDelete, MdOutlineCancel } from "react-icons/md";
@@ -35,7 +37,7 @@ const CardPage = ({ listId }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [authParams, listId, url]);
 
   const handleCreateCard = () => {
     if (!cardName.trim()) return;
