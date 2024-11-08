@@ -1,5 +1,6 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const SingleBoardPageHeader = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const SingleBoardPageHeader = () => {
         onClick={() => navigate(-1)}
         variant="plain"
       >
-        Back
+        <IoMdArrowRoundBack />
       </Button>
       <Text color="whiteAlpha.800"> Trello</Text>
       <Text color="whiteAlpha.800">RC</Text>
