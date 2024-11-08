@@ -60,7 +60,7 @@ const SingleBoardPage = () => {
       .finally(() => {
         dispatch(setLoading(false));
       });
-  }, []);
+  }, [authParams, dispatch, id, url]);
 
   const handleCreateList = () => {
     const newListName = listName.trim();
