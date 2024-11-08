@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import { MdDelete, MdOutlineCancel } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 
 import SingleBoardPageHeader from "../components/SingleBoardPageHeader";
 import {
@@ -20,42 +21,44 @@ import {
   handlePostRequest,
   handlePutRequest,
 } from "../utils/helper";
+import {
+  setLists,
+  setLoading,
+  setIsAddingList,
+  setListName,
+  addList,
+  deleteList,
+  setSingleBoardName,
+} from "../redux/slices/singleBoardSlice";
 import CardPage from "./CardPage";
 
 const SingleBoardPage = () => {
   const url = import.meta.env.VITE_URL;
   const apiKey = import.meta.env.VITE_KEY;
   const apiToken = import.meta.env.VITE_TOKEN;
-
-  const navigate = useNavigate();
-  const [boardName, setBoardName] = useState("");
-  const [lists, setLists] = useState([]);
-  const [listName, setListName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isAddingList, setIsAddingList] = useState(false);
-
-  const { id } = useParams();
-
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const { lists, singleBoardName, loading, isAddingList, listName } =
+    useSelector((state) => state.singleBoard);
+
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handleGetRequest(`${url}/boards/${id}/lists?${authParams}`)
       .then((response) => {
-        setLists(response.data);
-        if (response.data && response.data[0]?.idBoard) {
-          return handleGetRequest(`${url}/boards/${id}?${authParams}`);
-        }
+        dispatch(setLists(response.data));
+        return handleGetRequest(`${url}/boards/${id}?${authParams}`);
       })
       .then((boardResponse) => {
-        setBoardName(boardResponse.data.name);
+        dispatch(setSingleBoardName(boardResponse.data.name));
       })
       .catch((error) => {
         console.error("Unable to get lists!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
   }, []);
 
@@ -63,35 +66,36 @@ const SingleBoardPage = () => {
     const newListName = listName.trim();
     if (!newListName) return;
 
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handlePostRequest(
       `${url}/boards/${id}/lists?name=${newListName}&${authParams}`
     )
       .then((response) => {
-        setLists([...lists, response.data]);
+        dispatch(addList(response.data));
       })
       .catch((error) => {
         console.error("Unable to create list!", error);
       })
       .finally(() => {
-        setListName("");
-        setLoading(false);
+        dispatch(setListName(""));
+        dispatch(setLoading(false));
+        dispatch(setIsAddingList(false));
       });
   };
 
   const handleDeleteList = (listId) => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handlePutRequest(`${url}/lists/${listId}/closed?value=true&${authParams}`)
       .then(() => {
-        setLists(lists.filter((list) => list.id !== listId));
+        dispatch(deleteList(listId));
       })
       .catch((error) => {
         console.error("Unable to delete list!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
   };
 
@@ -106,7 +110,7 @@ const SingleBoardPage = () => {
 
       <Flex p="2" w="full">
         <Heading as="h2" size="lg" color="whiteAlpha.800">
-          {boardName || "Loading..."}
+          {singleBoardName || "Loading..."}
         </Heading>
       </Flex>
 
@@ -159,7 +163,7 @@ const SingleBoardPage = () => {
               <Input
                 placeholder="Enter list name"
                 value={listName}
-                onChange={(e) => setListName(e.target.value)}
+                onChange={(e) => dispatch(setListName(e.target.value))}
                 color="whiteAlpha.800"
                 size="sm"
                 mb="2"
@@ -176,7 +180,7 @@ const SingleBoardPage = () => {
                   Add List
                 </Button>
                 <Button
-                  onClick={() => setIsAddingList(false)}
+                  onClick={() => dispatch(setIsAddingList(false))}
                   size="xs"
                   bg="rgb(16, 18, 4)"
                   color="whiteAlpha.900"
@@ -187,7 +191,7 @@ const SingleBoardPage = () => {
             </Box>
           ) : (
             <Button
-              onClick={() => setIsAddingList(true)}
+              onClick={() => dispatch(setIsAddingList(true))}
               minW="300px"
               p={3}
               color="whiteAlpha.900"
