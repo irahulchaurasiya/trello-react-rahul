@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import  { useState } from "react";
 import { Stack } from "@chakra-ui/react";
 import { Input, Button, Text } from "@chakra-ui/react";
 
@@ -13,7 +14,7 @@ import {
 const CreateBoardPopover = ({ onCreate }) => {
   const [boardName, setBoardName] = useState("");
 
-  const handleCreateBoard = (e) => {
+  const handleCreateBoard = () => {
     if (boardName.trim()) {
       onCreate(boardName);
       setBoardName("");
