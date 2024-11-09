@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { Box, Card, Text, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -34,7 +35,7 @@ const Homepage = () => {
       .finally(() => {
         dispatch(setLoading(false));
       });
-  }, [authParams, dispatch, url]);
+  }, []);
 
   const handleCreateBoard = (name) => {
     if (name) {
