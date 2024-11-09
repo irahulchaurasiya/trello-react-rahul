@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    cards : [],
-    loading : false,
-    isAddingCard : false,
-    cardName: '',
+    listCards : {},
+    loading : {},
+    isAddingCard : {},
+    cardName: {},
 }
 
 const CardsSlice = createSlice({
@@ -12,22 +12,31 @@ const CardsSlice = createSlice({
     initialState,
     reducers : {
         setCards : (state, action) => {
-            state.cards = action.payload;
+            const {listId , cards} = action.payload
+            state.listCards[listId] = cards;
+            state.loading[listId] = false;
         },
         addCard : (state, action) => {
-            state.cards.push(action.payload);
+            const { listId, card } = action.payload;
+            state.listCards[listId].push(card);
         },
         setIsAddingCard : (state, action) => {
-            state.isAddingCard = action.payload;
+            const { listId , isAdding} = action.payload;
+            state.isAddingCard[listId] = isAdding;
         },
         setCardName : (state, action) => {
-            state.cardName = action.payload;
+            const { listId, cardName} = action.payload;
+            state.cardName[listId] = cardName;
         },
         deleteCard : (state, action) => {
-            state.cards = state.cards.filter((card) => card.id !== action.payload);
+            const { listId, cardId } = action.payload;
+            state.listCards[listId] = state.listCards[listId].filter(
+              (card) => card.id !== cardId
+            );
         },
         setLoading : (state, action) => {
-            state.loading = action.payload;
+            const {listId , loading} = action.payload;
+            state.loading[listId] = loading;
         }
     },
 });
