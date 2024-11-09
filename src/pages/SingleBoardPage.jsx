@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -60,7 +61,7 @@ const SingleBoardPage = () => {
       .finally(() => {
         dispatch(setLoading(false));
       });
-  }, [authParams, dispatch, id, url]);
+  }, []);
 
   const handleCreateList = () => {
     const newListName = listName.trim();
