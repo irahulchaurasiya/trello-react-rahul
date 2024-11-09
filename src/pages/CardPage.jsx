@@ -37,59 +37,66 @@ const CardPage = ({ listId }) => {
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
   const dispatch = useDispatch();
-  const { cards, loading, isAddingCard, cardName } = useSelector(
-    (state) => state.cards
-  );
+  const cards = useSelector((state) => state.cards.listCards[listId] || []);
+  const loading = useSelector((state) => state.cards.loading[listId]);
+  const isAddingCard = useSelector((state) => state.cards.isAddingCard[listId]);
+  const cardName = useSelector((state) => state.cards.cardName[listId] || "");
 
   useEffect(() => {
     if (!listId) return;
-    dispatch(setLoading(true));
+    dispatch(setLoading({ listId: listId, loading: true }));
     handleGetRequest(`${url}/lists/${listId}/cards?${authParams}`)
       .then((response) => {
-        dispatch(setCards(response.data));
+        dispatch(
+          setCards({
+            listId: listId,
+            cards: response.data,
+          })
+        );
       })
       .catch((error) => {
         console.error("Unable to get cards!", error);
       })
       .finally(() => {
-        dispatch(setLoading(false));
+        dispatch(setLoading({ listId: listId, loading: false }));
       });
   }, [listId, dispatch]);
 
   const handleCreateCard = () => {
     if (!cardName.trim()) return;
-    dispatch(setIsAddingCard(true));
-
-    dispatch(setLoading(true));
     if (cardName) {
       handlePostRequest(
         `${url}/cards?idList=${listId}&name=${cardName}&${authParams}`
       )
         .then((response) => {
-          dispatch(addCard(response.data));
+          dispatch(addCard({ listId: listId, card: response.data }));
         })
         .catch((error) => {
           console.error("Unable to get cards!", error);
         })
         .finally(() => {
-          dispatch(setCardName(""));
-          dispatch(setLoading(false));
+          dispatch(setCardName({ listId: listId, cardName: "" }));
         });
     }
   };
 
   const handleDeleteCard = (id) => {
-    dispatch(setLoading(true));
+    dispatch(setLoading({ listId: listId, loading: true }));
 
     handleDeleteRequest(`${url}/cards/${id}?${authParams}`)
       .then(() => {
-        dispatch(deleteCard(id));
+        dispatch(
+          deleteCard({
+            listId: listId,
+            cardId: id,
+          })
+        );
       })
       .catch((error) => {
         console.error("Unable to delete card!", error);
       })
       .finally(() => {
-        dispatch(setLoading(false));
+        dispatch(setLoading({ listId: listId, loading: false }));
       });
   };
 
@@ -146,7 +153,9 @@ const CardPage = ({ listId }) => {
                 value={cardName}
                 bgColor="gray.800"
                 border="none"
-                onChange={(e) => dispatch(setCardName(e.target.value))}
+                onChange={(e) =>
+                  dispatch(setCardName({ listId, cardName: e.target.value }))
+                }
                 color="whiteAlpha.800"
                 size="sm"
                 mb="2"
@@ -164,7 +173,9 @@ const CardPage = ({ listId }) => {
                 </Button>
                 <Button
                   color="whiteAlpha.900"
-                  onClick={() => dispatch(setIsAddingCard(false))}
+                  onClick={() =>
+                    dispatch(setIsAddingCard({ listId, isAdding: false }))
+                  }
                   size="xs"
                   bg="rgb(16, 18, 4)"
                 >
@@ -174,7 +185,9 @@ const CardPage = ({ listId }) => {
             </Box>
           ) : (
             <Button
-              onClick={() => dispatch(setIsAddingCard(true))}
+              onClick={() =>
+                dispatch(setIsAddingCard({ listId, isAdding: true }))
+              }
               color="whiteAlpha.900"
               borderRadius="md"
               bg="rgb(16, 18, 4)"
