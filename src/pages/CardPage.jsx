@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { MdDelete, MdOutlineCancel } from "react-icons/md";
 import {
@@ -28,7 +28,7 @@ import {
   setCardName,
   deleteCard,
   setLoading,
-} from "../redux/slices/CardSlice";
+} from "../redux/slices/cardSlice";
 
 const CardPage = ({ listId }) => {
   const url = import.meta.env.VITE_URL;
