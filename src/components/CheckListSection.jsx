@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Box, Input, Button, Stack, Text, Spinner } from "@chakra-ui/react";
 import { FiCheckSquare } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   handlePostRequest,
@@ -9,66 +10,71 @@ import {
   handleDeleteRequest,
 } from "../utils/helper";
 import CheckItemsSection from "./CheckItemsSection";
+import {
+  setLoading,
+  setChecklists,
+  addCheckList,
+  deleteCheckList,
+  setCheckListName,
+} from "../redux/slices/checklistSlice";
 
 const CheckListSection = ({ cardId }) => {
   const url = import.meta.env.VITE_URL;
   const apiKey = import.meta.env.VITE_KEY;
   const apiToken = import.meta.env.VITE_TOKEN;
-
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
-  const [checklists, setChecklists] = useState([]);
-  const [checklistName, setChecklistName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { checklistName, loading } = useSelector((state) => state.checklists);
+
+  const checklists =
+    useSelector((state) => state.checklists.checklistsByCard[cardId]) || [];
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
     handleGetRequest(`${url}/cards/${cardId}/checklists?${authParams}`)
       .then((response) => {
-        setChecklists(response.data);
+        dispatch(setChecklists({ cardId, checklists: response.data }));
       })
       .catch((error) => {
         console.error("Unable to get checklists!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
-  }, [authParams, cardId, url]);
+  }, [dispatch, authParams, cardId, url]);
 
   const handleCreateChecklist = () => {
     const newChecklistName = checklistName.trim();
-
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handlePostRequest(
       `${url}/cards/${cardId}/checklists?&name=${newChecklistName}&${authParams}`
     )
       .then((response) => {
-        setChecklists([...checklists, response.data]);
+        dispatch(addCheckList({ cardId, checklist: response.data }));
       })
       .catch((error) => {
         console.error("Unable to create checklist!", error);
       })
       .finally(() => {
-        setChecklistName("");
-        setLoading(false);
+        dispatch(setCheckListName(""));
+        dispatch(setLoading(false));
       });
   };
 
   const handleDeleteChecklist = (checklistId) => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     handleDeleteRequest(`${url}/checklists/${checklistId}?${authParams}`)
       .then(() => {
-        setChecklists(
-          checklists.filter((checklist) => checklist.id !== checklistId)
-        );
+        dispatch(deleteCheckList({ cardId, checklistId }));
       })
       .catch((error) => {
         console.error("Unable to delete checklist!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
   };
 
@@ -83,7 +89,7 @@ const CheckListSection = ({ cardId }) => {
         <Input
           placeholder="Add new checklist"
           value={checklistName}
-          onChange={(e) => setChecklistName(e.target.value)}
+          onChange={(e) => dispatch(setCheckListName(e.target.value))}
           bg="gray.700"
           color="white"
           border="none"
