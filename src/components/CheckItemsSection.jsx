@@ -1,8 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { Box, Input, Spinner, Button, Progress, Text } from "@chakra-ui/react";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLoading,
+  setCheckItems,
+  addCheckItem,
+  deleteCheckItem,
+  updateCheckItemState,
+  setCheckItemName,
+  setIsAddingItem,
+} from "../redux/slices/checkItemsSlice";
 import {
   handleDeleteRequest,
   handleGetRequest,
@@ -14,99 +23,94 @@ import { Checkbox } from "../components/ui/checkbox";
 import { ProgressBar } from "../components/ui/progress";
 
 const CheckItemsSection = ({ cardId, checklistId }) => {
+  const dispatch = useDispatch();
   const url = import.meta.env.VITE_URL;
   const apiKey = import.meta.env.VITE_KEY;
   const apiToken = import.meta.env.VITE_TOKEN;
 
   const authParams = `key=${apiKey}&token=${apiToken}`;
 
-  const [checkItems, setCheckItems] = useState([]);
-  const [checkItemName, setCheckItemName] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [isAddingItem, setIsAddingItem] = useState(false);
+  const { checkItemsByChecklist, loading, checkItemName, isAddingItem } =
+    useSelector((state) => state.checkItems);
+
+  const checkItems = checkItemsByChecklist[checklistId] || [];
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoading(true));
     handleGetRequest(
       `${url}/checklists/${checklistId}/checkItems?${authParams}`
     )
       .then((response) => {
-        setCheckItems(response.data);
+        dispatch(setCheckItems({ checklistId, checkItems: response.data }));
       })
       .catch((error) => {
-        console.log("Unable to get checkitems!", error);
+        console.error("Unable to get checkitems!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
-  }, [authParams, checklistId, url]);
+  }, [dispatch, authParams, checklistId, url]);
 
   const handleCreateCheckItem = () => {
-    setLoading(true);
     if (checkItemName) {
+      dispatch(setLoading(true));
       handlePostRequest(
         `${url}/checklists/${checklistId}/checkItems?name=${checkItemName}&${authParams}`
       )
         .then((response) => {
-          setCheckItems([...checkItems, response.data]);
+          dispatch(addCheckItem({ checklistId, checkItem: response.data }));
+          dispatch(setCheckItemName(""));
         })
         .catch((error) => {
-          console.log("Unable to create checkitem!", error);
+          console.error("Unable to create checkitem!", error);
         })
         .finally(() => {
-          setLoading(false);
-          setCheckItemName("");
+          dispatch(setLoading(false));
         });
     }
   };
 
   const handleDeleteCheckItem = (checkItemId) => {
-    setLoading(true);
-
+    dispatch(setLoading(true));
     handleDeleteRequest(
       `${url}/checklists/${checklistId}/checkItems/${checkItemId}?${authParams}`
     )
       .then(() => {
-        setCheckItems(
-          checkItems.filter((checkItem) => checkItem.id !== checkItemId)
-        );
+        dispatch(deleteCheckItem({ checklistId, checkItemId }));
       })
       .catch((error) => {
-        console.log("Unable to delete checkitem1", error);
+        console.error("Unable to delete checkitem!", error);
       })
       .finally(() => {
-        setLoading(false);
+        dispatch(setLoading(false));
       });
   };
 
-  const handleUpdateChechItem = (checkItemId, checkItemState) => {
+  const handleUpdateCheckItem = (checkItemId, checkItemState) => {
     const updatedState =
-      checkItemState == "incomplete" ? "complete" : "incomplete";
+      checkItemState === "incomplete" ? "complete" : "incomplete";
 
     handlePutRequest(
       `${url}/cards/${cardId}/checklist/${checklistId}/checkItem/${checkItemId}?state=${updatedState}&${authParams}`
     )
       .then(() => {
-        setCheckItems(
-          checkItems.map((checkItem) => {
-            if (checkItem.id === checkItemId) {
-              return {
-                ...checkItem,
-                state: updatedState,
-              };
-            } else {
-              return checkItem;
-            }
+        dispatch(
+          updateCheckItemState({
+            checklistId,
+            checkItemId,
+            state: updatedState,
           })
         );
       })
       .catch((error) => {
         console.error("Unable to update checkitem status!", error);
       })
-      .finally(() => {});
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
-  let percent = Math.ceil(handleCheckItemsPercent(checkItems));
+  const percent = Math.ceil(handleCheckItemsPercent(checkItems));
 
   return (
     <Box>
@@ -118,11 +122,11 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
             <Box>
               <Text>{percent}%</Text>
               <Progress.Root value={percent} mb="2">
-                <ProgressBar></ProgressBar>
+                <ProgressBar />
               </Progress.Root>
             </Box>
             {checkItems.map((checkItem) => {
-              let checkItemState = checkItem.state;
+              const checkItemState = checkItem.state;
               return (
                 <Box
                   mb="2"
@@ -133,9 +137,9 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
                 >
                   <Checkbox
                     onClick={() =>
-                      handleUpdateChechItem(checkItem.id, checkItemState)
+                      handleUpdateCheckItem(checkItem.id, checkItemState)
                     }
-                    checked={checkItemState == "complete"}
+                    checked={checkItemState === "complete"}
                   >
                     <Text
                       textDecoration={
@@ -158,16 +162,20 @@ const CheckItemsSection = ({ cardId, checklistId }) => {
               <Input
                 placeholder="Add new check item"
                 value={checkItemName}
-                onChange={(e) => setCheckItemName(e.target.value)}
+                onChange={(e) => dispatch(setCheckItemName(e.target.value))}
                 mb={2}
               />
               <Button mr="2" onClick={handleCreateCheckItem}>
                 Add
               </Button>
-              <Button onClick={() => setIsAddingItem(false)}>Cancel</Button>
+              <Button onClick={() => dispatch(setIsAddingItem(false))}>
+                Cancel
+              </Button>
             </>
           ) : (
-            <Button onClick={() => setIsAddingItem(true)}>Add an Item</Button>
+            <Button onClick={() => dispatch(setIsAddingItem(true))}>
+              Add an Item
+            </Button>
           )}
         </>
       )}
