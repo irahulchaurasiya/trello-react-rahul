@@ -20,15 +20,20 @@ export const handleDeleteRequest = async (url) => {
   return response;
 };
 
-export const handleCheckItemsPercent = (checkItems) => {
-  if(checkItems.length === 0){
+export const handleCheckItemsPercent = (checkItems = []) => {
+  if (!Array.isArray(checkItems)) {
     return 0;
   }
+
+  if (checkItems.length === 0) {
+    return 0;
+  }
+
   let checkedCount = 0;
   let totalCheckItems = checkItems.length;
 
   checkItems.forEach((checkItem) => {
-    if (checkItem.state == "complete") {
+    if (checkItem.state === "complete") {
       checkedCount++;
     }
   });
